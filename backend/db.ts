@@ -1,3 +1,12 @@
-export const db = () => {
-  
-}
+import pkg from 'pg'
+const { Pool } = pkg
+import dotenv from 'dotenv'
+dotenv.config()
+
+export const pool = new Pool({
+  user: process.env.DB_USER,
+  host: 'localhost',
+  database: process.env.DB,
+  port: parseInt(process.env.PORT),
+  password:  process.env.DB_PASSWORD,
+})
