@@ -3,9 +3,20 @@ import { View, Text, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Input from 'app/components/Input';
 import Title from 'app/components/Title';
+import { useAuth } from 'app/hooks/useAuth';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 const Login = () => {
   const navigation = useNavigation()
+  const { setAuthorized } = useAuth()
+
+  const login = () => {
+    const res = fetch(EXPO_PUBLIC_BACKEND_SERVER,
+      {
+
+      }
+    )
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-primary pt-4 px-8 gap-8">
