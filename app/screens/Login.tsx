@@ -4,19 +4,50 @@ import { useNavigation } from '@react-navigation/native';
 import Input from 'app/components/Input';
 import Title from 'app/components/Title';
 import { useAuth } from 'app/hooks/useAuth';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { BACKEND_SERVER, USERS_ENDPOINT} from '@env'
+import { useState } from 'react';
+import * as SecureStore from 'expo-secure-store'
 
 const Login = () => {
   const navigation = useNavigation()
-  const { setAuthorized } = useAuth()
+  const { authorized, setAuthorized } = useAuth()
+  const [loginForm, setLoginForm] = useState({
+    email: '',
+    password: ''
+  })
 
-  const login = () => {
-    const res = fetch(EXPO_PUBLIC_BACKEND_SERVER,
+  console.log(BACKEND_SERVER)
+
+  const loginFn = async () => {
+    const res = await fetch(`${BACKEND_SERVER}${USERS_ENDPOINT}/login`,
       {
-
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: loginForm.email,
+          password: loginForm.password
+        })
       }
     )
+    if (!res.ok) throw new Error('Error in your Login response')
+    return await res.json()
   }
+
+  const loginMutation = useMutation({
+    mutationFn: loginFn,
+    onSuccess: async(data) => {
+      console.log(authorized)
+      setAuthorized(true)
+      await SecureStore.setItemAsync('token', data.token)
+      console.log('Logged: ', data)
+    },
+    onError: (error) => {
+      console.log(error.message)
+    }
+  })
 
   return (
     <SafeAreaView className="flex-1 bg-primary pt-4 px-8 gap-8">
@@ -26,12 +57,17 @@ const Login = () => {
       <View className="w-full justify-center items-center gap-8">
         <Input 
           inputName="Email"
+          value={loginForm.email}
+           setValue={(text) => setLoginForm({ ...loginForm, email: text })} 
         />
+        
         <Input 
           inputName={'Password'}
+          value={loginForm.password}
+          setValue={(text) => setLoginForm({...loginForm, password: text})}
         />
         <View className="flex-col gap-8 w-full justify-center items-center">
-          <Pressable className='rounded-lg bg-secondary py-2 w-full'>
+          <Pressable onPress={() => loginMutation.mutate()} className='rounded-lg bg-secondary py-2 w-full'>
             <Text className="text-center text-white text-lg">Login</Text>
           </Pressable>
           <View className="gap-4 max-w-[120px]">
