@@ -6,9 +6,8 @@ type useAuthTypes = {
   resetAuthorized: () =>  void
 }
 
-
 export const useAuth = create<useAuthTypes>((set) => ({
   authorized: false,
-  setAuthorized: (auth) =>  ({authorized: auth}),
-  resetAuthorized: () => ({authorized: false})
+  setAuthorized: (auth) =>  set({authorized: auth}),
+  resetAuthorized: () => set({authorized: false})
 }))

@@ -9,6 +9,7 @@ import { BACKEND_SERVER, USERS_ENDPOINT} from '@env'
 import { useState } from 'react';
 import * as SecureStore from 'expo-secure-store'
 
+
 const Login = () => {
   const navigation = useNavigation()
   const { authorized, setAuthorized } = useAuth()
@@ -16,8 +17,6 @@ const Login = () => {
     email: '',
     password: ''
   })
-
-  console.log(BACKEND_SERVER)
 
   const loginFn = async () => {
     const res = await fetch(`${BACKEND_SERVER}${USERS_ENDPOINT}/login`,
@@ -39,10 +38,16 @@ const Login = () => {
   const loginMutation = useMutation({
     mutationFn: loginFn,
     onSuccess: async(data) => {
-      console.log(authorized)
       setAuthorized(true)
+      console.log('authorized after setAuthorized call:', authorized)
+      console.log('Store value after update:', useAuth.getState().authorized) 
       await SecureStore.setItemAsync('token', data.token)
       console.log('Logged: ', data)
+      setLoginForm({
+        email: '',
+        password: ''
+      })
+      navigation.navigate('User Dashboard')
     },
     onError: (error) => {
       console.log(error.message)
