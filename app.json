@@ -10,7 +10,9 @@
     "experiments": {
       "tsconfigPaths": true
     },
-    "plugins": [],
+    "plugins": [
+      "expo-secure-store"
+    ],
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
@@ -21,13 +23,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.PERNstackexpensetrackerapp"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0d062cff"
       },
       "package": "com.anonymous.PERNstackexpensetrackerapp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "274ff5f9-361f-4e75-96f4-1a74942ac9d2"
+      }
     }
   }
 }
