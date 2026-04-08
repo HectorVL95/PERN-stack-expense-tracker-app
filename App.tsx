@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import UserDashboard from 'app/screens/UserDashboard';
 import { useAuth } from 'app/hooks/useAuth';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import ExpensesDashboard from 'app/components/ExpensesDashboard';
 
 export default function App() {
   const Stack = createNativeStackNavigator()
@@ -24,6 +25,11 @@ export default function App() {
                 <Stack.Screen 
                   name='User Dashboard'
                   component={UserDashboard}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name='Expenses Dashboard'
+                  component={ExpensesDashboard}
                   options={{headerShown: false}}
                 />
               </Stack.Navigator>
