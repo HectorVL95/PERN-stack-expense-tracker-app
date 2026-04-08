@@ -35,14 +35,16 @@ const Login = () => {
     return await res.json()
   }
 
+  const handleLoginBtn = () => {
+    loginMutation.mutate()
+    console.log('pressed')
+  }
+
   const loginMutation = useMutation({
     mutationFn: loginFn,
     onSuccess: async(data) => {
       setAuthorized(true)
-      console.log('authorized after setAuthorized call:', authorized)
-      console.log('Store value after update:', useAuth.getState().authorized) 
       await SecureStore.setItemAsync('token', data.token)
-      console.log('Logged: ', data)
       setLoginForm({
         email: '',
         password: ''
@@ -72,7 +74,8 @@ const Login = () => {
           setValue={(text) => setLoginForm({...loginForm, password: text})}
         />
         <View className="flex-col gap-8 w-full justify-center items-center">
-          <Pressable onPress={() => loginMutation.mutate()} className='rounded-lg bg-secondary py-2 w-full'>
+          <Pressable onPress={handleLoginBtn
+          } className='rounded-lg bg-secondary py-2 w-full'>
             <Text className="text-center text-white text-lg">Login</Text>
           </Pressable>
           <View className="gap-4 max-w-[120px]">

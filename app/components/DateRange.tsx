@@ -1,32 +1,33 @@
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 type DateRangeTypesProps = {
   fromDate: string,
   toDate: string,
   budget: number,
   expense: number
+  seeExpense: () => void 
 }
 
-const DateRange: React.FC<DateRangeTypesProps> = ({fromDate, toDate}) => {
+const DateRange: React.FC<DateRangeTypesProps> = ({fromDate, toDate, budget, expense, seeExpense}) => {
   return (
-    <View>
+    <Pressable onPress={seeExpense} className="flex-row  justify-between border border-white rounded-lg p-4">
       <View>
         <Text className='text-white'>
-          From: 03/14/2025
+          From: {fromDate}
         </Text>
         <Text className='text-white'>
-          To: 03/28/2025
+          To: {toDate}
         </Text>
       </View>
       <View>
         <Text className='text-white'>
-          Budget: $300
+          Budget: ${budget}
         </Text>
         <Text className='text-white'>
-          Expenses: $260
+          Expenses: ${typeof null ? '0' : expense}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

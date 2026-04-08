@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Text, Image } from 'react-native';
 
 type ExpenseTypeProps ={
   name: string,
@@ -6,13 +6,26 @@ type ExpenseTypeProps ={
   location: string,
   image: string,
   dateCreated: string,
-  hourCreated: string
+  timeCreated: string
 }
 
-const Expense: React.FC<ExpenseTypeProps> = ({name, amount, location, image, dateCreated, hourCreated }) => {
+const Expense: React.FC<ExpenseTypeProps> = ({name, amount, location, image, dateCreated, timeCreated }) => {
   return (
     <View>
-      
+      <View>
+        <Text>{name}</Text>
+        <Text>{amount}</Text>
+        <Text>{location}</Text>
+        <Text></Text>
+      </View>
+      <View>
+        <Image 
+          src={image}
+          
+        />
+      </View>
+      <Text>Date: {dateCreated}</Text>
+      <Text>Time: {timeCreated}</Text>
     </View>
   );
 }
