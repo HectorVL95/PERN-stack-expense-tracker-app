@@ -1,6 +1,6 @@
 import { View, Text, Image } from 'react-native';
 
-type ExpenseTypeProps ={
+type ExpenseTypeProps = {
   name: string,
   amount: number,
   location: string,
@@ -15,7 +15,7 @@ const Expense: React.FC<ExpenseTypeProps> = ({name, amount, location, image, dat
       <View>
         <Text className="text-white">{name}</Text>
         <Text className="text-white" >${amount}</Text>
-        <Text className="text-white" >{location}</Text>
+        <Text className="text-whit|||e" >{location}</Text>
         <Text className="text-white" ></Text>
       </View>
       <View>
