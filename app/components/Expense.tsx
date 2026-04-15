@@ -21,7 +21,8 @@ const Expense: React.FC<ExpenseTypeProps> = ({name, amount, location, image, dat
       <View>
         <Image 
           src={image}
-          
+          width={280}
+          height={280}
         />
       </View>
       <Text className="text-white" >Date: {dateCreated}</Text>
