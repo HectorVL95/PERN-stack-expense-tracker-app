@@ -11,22 +11,27 @@ type ExpenseTypeProps = {
 
 const Expense: React.FC<ExpenseTypeProps> = ({name, amount, location, image, dateCreated, timeCreated }) => {
   return (
-    <View className="border border-white rounded-xl  p-4">
+    <View className="border border-white rounded-xl p-4">
       <View>
         <Text className="text-white">{name}</Text>
         <Text className="text-white" >${amount}</Text>
-        <Text className="text-whit|||e" >{location}</Text>
-        <Text className="text-white" ></Text>
+        {location && <Text className="text-white" >{location}</Text>}
       </View>
+     {
+      image && 
+        <View className='justify-center items-center py-4'>
+          <Image 
+            className='rounded-2xl'
+            src={image}
+            width={280}
+            height={280}
+          />
+        </View>
+      }
       <View>
-        <Image 
-          src={image}
-          width={280}
-          height={280}
-        />
+        <Text className="text-white" >Date: {dateCreated}</Text>
+        <Text className="text-white" >Time: {timeCreated}</Text>
       </View>
-      <Text className="text-white" >Date: {dateCreated}</Text>
-      <Text className="text-white" >Time: {timeCreated}</Text>
     </View>
   );
 }

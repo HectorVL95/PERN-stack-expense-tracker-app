@@ -4,7 +4,6 @@ import Title from './Title';
 import Expense from './Expense';
 import { useQuery } from '@tanstack/react-query';
 import * as SecureStorage from 'expo-secure-store'
-import { BACKEND_SERVER, EXPENSES_ENDPOINT } from '@env';
 
 type ExpensesDashboardTypeProps = {
   route: string
@@ -14,13 +13,11 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
 
   const { dateRangeId } = route.params
 
-  console.log(dateRangeId)
-
   const fetchExpenses = async() => {
     const token = SecureStorage.getItem('token')
     if (!token) return;
 
-    const res = await fetch(`${BACKEND_SERVER}${EXPENSES_ENDPOINT}/${dateRangeId}`, {
+    const res = await fetch(`${process.env.BACKEND_SERVER}${process.env.EXPENSES_ENDPOINT}/${dateRangeId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -56,13 +53,14 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
           { 
             fetchedExpenses.map((expense: any) => {
               return (
-              <Expense 
+              <Expense
+                key={expense.id}
                 name={expense.name}
                 amount={expense.amount}
                 location={expense.location}
                 image={expense.image}
-                dateCreated={expense.date}
-                timeCreated={expense.time}
+                dateCreated={expense.date_created}
+                timeCreated={expense.hour_created}
               />
               )
             })
