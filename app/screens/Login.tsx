@@ -5,7 +5,7 @@ import Input from 'app/components/Input';
 import Title from 'app/components/Title';
 import { useAuth } from 'app/hooks/useAuth';
 import { useMutation } from '@tanstack/react-query';
-import { BACKEND_SERVER, USERS_ENDPOINT} from '@env'
+
 import { useState } from 'react';
 import * as SecureStore from 'expo-secure-store'
 
@@ -19,7 +19,7 @@ const Login = () => {
   })
 
   const loginFn = async () => {
-    const res = await fetch(`${BACKEND_SERVER}${USERS_ENDPOINT}/login`,
+    const res = await fetch(`${process.env.BACKEND_SERVER}${process.env.USERS_ENDPOINT}/login`,
       {
         method: 'POST',
         headers: {
@@ -37,7 +37,6 @@ const Login = () => {
 
   const handleLoginBtn = () => {
     loginMutation.mutate()
-    console.log('pressed')
   }
 
   const loginMutation = useMutation({
