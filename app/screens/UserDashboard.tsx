@@ -14,7 +14,7 @@ const UserDashboard = () => {
   const fetchDateRanges = async () => {
     const token = SecureStorage.getItem('token')
     if (!token) return
-    const res = await fetch(`${process.env.BACKEND_SERVER}${process.env.DATE_RANGE_ENDPOINT}`, {
+    const res = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_SERVER}${process.env.EXPO_PUBLIC_DATE_RANGE_ENDPOINT}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -28,7 +28,7 @@ const UserDashboard = () => {
   const fetchUser = async () => {
     const token = SecureStorage.getItem('token')
     if (!token) return
-    const res = await fetch(`${process.env.BACKEND_SERVER}${process.env.USERS_ENDPOINT}`, {
+    const res = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_SERVER}${process.env.EXPO_PUBLIC_USERS_ENDPOINT}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`

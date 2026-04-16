@@ -1,15 +1,17 @@
-import {View, Text ,ScrollView} from 'react-native'
+import {View, Text ,ScrollView, Modal } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Title from './Title';
 import Expense from './Expense';
 import { useQuery } from '@tanstack/react-query';
 import * as SecureStorage from 'expo-secure-store'
+import { useState } from 'react';
 
 type ExpensesDashboardTypeProps = {
   route: string
 }
 
 const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Props) => {
+  const [showModal, setShowModal] = useState(false)
 
   const { dateRangeId } = route.params
 
@@ -17,7 +19,7 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
     const token = SecureStorage.getItem('token')
     if (!token) return;
 
-    const res = await fetch(`${process.env.BACKEND_SERVER}${process.env.EXPENSES_ENDPOINT}/${dateRangeId}`, {
+    const res = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_SERVER}${process.env.EXPO_PUBLIC_EXPENSES_ENDPOINT}/${dateRangeId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -49,7 +51,8 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
       }
       { 
         isSuccess &&
-        <ScrollView contentContainerClassName='gap-4'>
+        <>
+        <ScrollView contentContainerClassName='flex-1 gap-4'>
           { 
             fetchedExpenses.map((expense: any) => {
               return (
@@ -65,7 +68,23 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
               )
             })
           }
-        </ScrollView>  
+        </ScrollView> 
+        <Modal
+          visible={showModal}
+          className="bg-primary"
+          animationType="slide"
+          backdropColor={'#07277cff'}
+          onRequestClose={() => setShowModal(false)}
+          onDismiss={() => setShowModal(false)}
+          presentationStyle='pageSheet'
+        >
+          <View>
+            <Text>
+              Modal Shown P
+            </Text>
+          </View>
+        </Modal>
+        </>
       }
 
     </SafeAreaView>

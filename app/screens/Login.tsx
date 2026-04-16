@@ -19,7 +19,7 @@ const Login = () => {
   })
 
   const loginFn = async () => {
-    const res = await fetch(`${process.env.BACKEND_SERVER}${process.env.USERS_ENDPOINT}/login`,
+    const res = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_SERVER}${process.env.EXPO_PUBLIC_USERS_ENDPOINT}/login`,
       {
         method: 'POST',
         headers: {
@@ -73,8 +73,7 @@ const Login = () => {
           setValue={(text) => setLoginForm({...loginForm, password: text})}
         />
         <View className="flex-col gap-8 w-full justify-center items-center">
-          <Pressable onPress={handleLoginBtn
-          } className='rounded-lg bg-secondary py-2 w-full'>
+          <Pressable onPress={handleLoginBtn} className='rounded-lg bg-secondary py-2 w-full'>
             <Text className="text-center text-white text-lg">Login</Text>
           </Pressable>
           <View className="gap-4 max-w-[120px]">
