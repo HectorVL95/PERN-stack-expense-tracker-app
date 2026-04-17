@@ -9,6 +9,7 @@ import UserDashboard from 'app/screens/UserDashboard';
 import { useAuth } from 'app/hooks/useAuth';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import ExpensesDashboard from 'app/components/ExpensesDashboard';
+import { Platform, Pressable, Text, Button } from 'react-native';
 
 export default function App() {
   const Stack = createNativeStackNavigator()
@@ -25,12 +26,25 @@ export default function App() {
                 <Stack.Screen 
                   name='User Dashboard'
                   component={UserDashboard}
-                  options={{headerShown: false}}
+                  options={{
+                    headerShown: false,
+                    headerLeft: () => <Button title='Go back' onPress={() => console.log('Back')} className="text-black">Go back</Button>
+                  }}
+                  
                 />
                 <Stack.Screen 
                   name='Expenses Dashboard'
                   component={ExpensesDashboard}
-                  options={{headerShown: false}}
+                  options={({navigation}) => ({
+                    headerShown: Platform.OS === 'ios' ? true : false,
+                    headerLeft: () => <Button title='Go back' onPress={() => {
+                      navigation.navigate('User Dashboard')
+
+                    }} className="text-black">Go back</Button>}
+                  
+                  )
+                  
+                  }
                 />
               </Stack.Navigator>
             </NavigationContainer>
