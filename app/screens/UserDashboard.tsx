@@ -48,7 +48,6 @@ const UserDashboard = () => {
     queryKey: ['user'],
     queryFn: fetchUser
   })
-  
 
   const seeExpenseDetails = (dateRangeId: string) => {
     navigation.navigate('Expenses Dashboard', { dateRangeId } )

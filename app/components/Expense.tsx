@@ -8,14 +8,14 @@ type ExpenseTypeProps = {
   image: string,
   dateCreated: string,
   timeCreated: string
-  handlePress: () => void
+  onPress: () => void
 }
 
-const Expense: React.FC<ExpenseTypeProps> = ({name, amount, location, image, dateCreated, timeCreated, handlePress }) => {
+const Expense: React.FC<ExpenseTypeProps> = ({name, amount, location, image, dateCreated, timeCreated, onPress }) => {
 
 
   return (
-    <Pressable onPress={handlePress} className="border border-white rounded-xl p-4">
+    <Pressable onPress={onPress} className="border border-white rounded-xl p-4">
       <View>
         <Text className="text-white">{name}</Text>
         <Text className="text-white" >${amount}</Text>

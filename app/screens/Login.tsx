@@ -12,7 +12,7 @@ import * as SecureStore from 'expo-secure-store'
 
 const Login = () => {
   const navigation = useNavigation()
-  const { authorized, setAuthorized } = useAuth()
+  const { setAuthorized } = useAuth()
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: ''
