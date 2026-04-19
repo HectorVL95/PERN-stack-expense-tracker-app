@@ -2,11 +2,12 @@ import {View, Text ,ScrollView, Modal, Button, Platform, Pressable } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Title from './Title';
 import Expense from './Expense';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import * as SecureStorage from 'expo-secure-store'
 import { useState } from 'react';
-import Icon from 'react-native-vector-icons/AntDesign'
 import Ionicons from '@expo/vector-icons/AntDesign';
+import ModalLayout from 'app/Layouts/ModalLayout';
+import ModalCreateExpense from './ModalCreateExpense';
 
 type ExpensesDashboardTypeProps = {
   route: string
@@ -15,7 +16,7 @@ type ExpensesDashboardTypeProps = {
 const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Props) => {
   const [showModal, setShowModal] = useState(false)
   const [selectedExpenseId, setSelectedExpenseId] = useState('')
-  const queryClient = useQueryClient
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   const { dateRangeId } = route.params
 
@@ -46,8 +47,6 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
     setShowModal(true)
     setSelectedExpenseId(id)
   }
-
-  console.log(selectedExpenseId)
 
   const deleteExpense = async () => {
     const token = SecureStorage.getItem('token')
@@ -82,6 +81,15 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
     deleteMutation.mutate()
   }
 
+
+  const handleCreateBtn = () => {
+    createMutation.mutate()
+  }
+
+  const handleAddExpenseBtn = () => {
+    setShowCreateModal(true)
+  }
+
   return (
     <SafeAreaView className="bg-primary flex-1 pt-4 px-8 gap-8">
       <Title
@@ -94,36 +102,42 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
           ... LOADING
         </Text>
       }
+      <Pressable onPress={handleAddExpenseBtn} className='bg-secondary max-w-[100px] p-4 rounded-lg'>
+        <Text className="text-white text-center">
+          Add Expense
+        </Text>
+      </Pressable>
       { 
         isSuccess &&
         <>
-        <ScrollView contentContainerClassName='gap-4'>
-          { 
-            fetchedExpenses.map((expense: any) => {
-              return (
-              <Expense
-                key={expense.id}
-                name={expense.name}
-                amount={expense.amount}
-                location={expense.location}
-                image={expense.image}
-                dateCreated={expense.date_created}
-                timeCreated={expense.hour_created}
-                onPress={() => {handlePress(expense.id)}}
-              />
-              )
-            })
-          }
-        </ScrollView> 
-        <Modal
+        <View>
+          <ScrollView contentContainerClassName='gap-4'>
+            { 
+              fetchedExpenses.map((expense: any) => {
+                return (
+                <Expense
+                  key={expense.id}
+                  name={expense.name}
+                  amount={expense.amount}
+                  location={expense.location}
+                  image={expense.image}
+                  dateCreated={expense.date_created}
+                  timeCreated={expense.hour_created}
+                  onPress={() => {handlePress(expense.id)}}
+                />
+                )
+              })
+            }
+          </ScrollView>
+        </View>
+        <ModalLayout
           visible={showModal}
-          animationType="slide"
-          backdropColor={'#07277cff'}
           onRequestClose={() => setShowModal(false)}
           onDismiss={() => setShowModal(false)}
-          presentationStyle='pageSheet'
+          animationType = 'slide'
+          backdropColor='#07277cff'
         >
-          <View className=" justify-center items-center py-8">
+         <View className="flex justify-center items-center py-8">
             {
               Platform.OS === 'ios' ? 
               <Button onPress={handleDeleteBtn} title="Delete">Delete</Button>
@@ -138,7 +152,13 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
               </Pressable>
             }
           </View>
-        </Modal>
+        </ModalLayout>
+         <ModalCreateExpense 
+          visibleModal={showCreateModal}
+          hideModal={() => {setShowCreateModal(false)}}
+          refetch={refetch}
+          selectedExpenseId={selectedExpenseId}
+         />
         </>
       }
 
