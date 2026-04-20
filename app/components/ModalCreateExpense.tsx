@@ -1,41 +1,46 @@
 import Input from './Input';
 import { Modal, View, Text, Pressable, Alert, Image, ActionSheetIOS, Platform } from 'react-native'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import ModalLayout from 'app/Layouts/ModalLayout';
-import { useState } from 'react';
+import { SetStateAction, Dispatch, useState } from 'react';
 import Ionicons from '@expo/vector-icons/AntDesign'
 import { useMutation } from '@tanstack/react-query';
 import Title from './Title';
 import * as SecureStorage from 'expo-secure-store'
 import * as ImagePicker from 'expo-image-picker'
+import { ModalCreateExpenseTypeProps } from 'app/types/modalTypes';
 
-type ModalCreateExpenseTypeProps = {
-  visibleModal: boolean,
-  hideModal: () => void,
-  refetch: () => void,
-  dateRangeId: string
-}
-
-const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({visibleModal, hideModal, refetch, dateRangeId}) => {
-  const [form, setForm] = useState({
-    name: '',
-    amount: '',
-    location: '',
-    image: ''
-  })
-
-  const [imageSelected, setImageSelected] = useState<string | null>(null)
-
+const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({
+  visibleModal, 
+  hideModal, 
+  refetch, 
+  dateRangeId, 
+  createExpenseForm, 
+  setCreateExpenseForm, 
+  imageSelected, 
+  setImageSelected
+  }) => {
+    const [showcasedImage, setShowcasedImage] = useState<null | string>(null)
+  
+ 
     const createExpense = async () => {
       const token = SecureStorage.getItem('token')
       if (!token) return;
-  
+
+      const form = new FormData()
+      form.append('name', createExpenseForm.name)
+      form.append('amount', createExpenseForm.amount)
+      form.append('location', createExpenseForm.location)
+
+      if (imageSelected) {
+        form.append('image', imageSelected)
+      }
+
       const res = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_SERVER}${process.env.EXPO_PUBLIC_EXPENSES_ENDPOINT}/${dateRangeId}`, {
+        method: 'POST',
         headers: {
-          method: 'POST',
           authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
+        },
+        body: form,
       })
   
       if (!res.ok) throw new Error('Error in your ')
@@ -47,6 +52,7 @@ const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({visibleModal
     mutationFn: createExpense,
     onSuccess: () => {
       refetch()
+      hideModal()
     },
     onError: (error) => {
       console.error(error.message)
@@ -72,8 +78,18 @@ const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({visibleModal
       quality: 1
     })
 
-    if (!result.canceled) {
-      setImageSelected(result.assets[0].uri)
+    if(!result.canceled) {
+      const imageUri = result.assets[0].uri
+      const fileName = imageUri.split('/').pop()
+
+      const imageFile = {
+        uri: imageUri,
+        name: fileName,
+        type: 'image/jpeg'
+      }
+
+      setImageSelected(imageFile)
+      setShowcasedImage(imageUri)
     }
   }
 
@@ -93,7 +109,17 @@ const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({visibleModal
     })
 
     if(!result.canceled) {
-      setImageSelected(result.assets[0].uri)
+      const imageUri = result.assets[0].uri
+      const fileName = imageUri.split('/').pop()
+
+      const imageFile = {
+        uri: imageUri,
+        name: fileName,
+        type: 'image/jpeg'
+      }
+
+      setImageSelected(imageFile)
+      setShowcasedImage(imageUri)
     }
 
   }
@@ -136,30 +162,29 @@ const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({visibleModal
       />
       <Input
         inputName='Name'
-        value={form.name}
-        setValue={(text) => setForm({...form, name: text})}
+        value={createExpenseForm.name}
+        setValue={(text) => setCreateExpenseForm({...createExpenseForm, name: text})}
       />
       <Input
         inputName='Amount'
         keyboardType='Numberic'
-        value={form.amount}
-        setValue={(text) => setForm({...form, amount: text})}
+        value={createExpenseForm.amount}
+        setValue={(text) => setCreateExpenseForm({...createExpenseForm, amount: text})}
         
       />
       <Input
         inputName='Location'
-        value={form.location}
-        setValue={(text) => setForm({...form, location: text})}
+        value={createExpenseForm.location}
+        setValue={(text) => setCreateExpenseForm({...createExpenseForm, location: text})}
       />
       <View className="justify-center items-center w-full">
-        
       {     
         imageSelected ?
         <Pressable onPress={handlePictureBtn}>
           <Image
             width={200}
             height={200}
-            src={imageSelected}
+            src={showcasedImage}
             className="rounded-lg"
             />
         </Pressable>

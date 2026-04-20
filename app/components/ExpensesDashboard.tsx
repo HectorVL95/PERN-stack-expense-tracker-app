@@ -17,9 +17,14 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
   const [showModal, setShowModal] = useState(false)
   const [selectedExpenseId, setSelectedExpenseId] = useState('')
   const [showCreateModal, setShowCreateModal] = useState(false)
-
+  const [createExpenseForm, setCreateExpenseForm] = useState({
+    name: '',
+    amount: '',
+    location: '',
+    image: ''
+  })
+  const [imageSelected, setImageSelected] = useState<string | null>(null)
   const { dateRangeId } = route.params
-
 
   const fetchExpenses = async() => {
     const token = SecureStorage.getItem('token')
@@ -64,7 +69,6 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
     return await res.json()
   }
 
-
   const deleteMutation = useMutation({
     mutationFn: deleteExpense,
     onSuccess: () => {
@@ -81,13 +85,19 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
     deleteMutation.mutate()
   }
 
-
-  const handleCreateBtn = () => {
-    createMutation.mutate()
-  }
-
   const handleAddExpenseBtn = () => {
     setShowCreateModal(true)
+  }
+
+  const handleHideCreateExpenseModal = () => {
+    setShowCreateModal(false)
+    setCreateExpenseForm({
+      name: '',
+      amount: '',
+      location: '',
+      image: ''
+    })
+    setImageSelected(null)
   }
 
   return (
@@ -153,15 +163,18 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
             }
           </View>
         </ModalLayout>
-         <ModalCreateExpense 
+        <ModalCreateExpense 
           visibleModal={showCreateModal}
-          hideModal={() => {setShowCreateModal(false)}}
+          hideModal={handleHideCreateExpenseModal}
           refetch={refetch}
-          selectedExpenseId={selectedExpenseId}
+          dateRangeId={dateRangeId}
+          createExpenseForm={createExpenseForm}
+          setCreateExpenseForm={setCreateExpenseForm}
+          imageSelected={imageSelected}
+          setImageSelected={setImageSelected}
          />
         </>
       }
-
     </SafeAreaView>
   );
 }
