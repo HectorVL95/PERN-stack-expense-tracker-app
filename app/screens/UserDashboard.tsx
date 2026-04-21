@@ -34,6 +34,7 @@ const UserDashboard = () => {
         'Authorization': `Bearer ${token}`
       }
     })
+    
     if (!res.ok) throw new Error('Error in your response to fetch user info')
     const data = await res.json()
     return data.data
@@ -53,6 +54,7 @@ const UserDashboard = () => {
     navigation.navigate('Expenses Dashboard', { dateRangeId } )
   }
 
+
   if (loadingUser) {
     return (
       <SafeAreaView className="bg-primary flex-1 pt-4 px-8 gap-8">
@@ -71,22 +73,22 @@ const UserDashboard = () => {
       <SafeAreaView className="bg-primary flex-1 pt-4 px-8 gap-8">
         <View className="gap-2">
           <Title 
-            titleText={`Welcome ${fetchedUser.name}`}
+            titleText={`Welcome ${fetchedUser?.name}`}
           />
-          <Text className="text-white text-center">Your set budget is <Text>${fetchedUser.budget}</Text></Text>
+          <Text className="text-white text-center">Your set budget is <Text>${fetchedUser?.budget}</Text></Text>
         </View>
         <ScrollView contentContainerClassName="flex flex-col gap-4">
           <Text className="text-white">Your date ranges</Text>
           {
-            fetchedDates.map((date: any) => {
+            fetchedDates?.map((date: any) => {
               return(
                 <DateRange 
-                  key={date.id}
-                  fromDate={String(date.from_date)}
-                  toDate={String(date.to_date)}
-                  budget={String(date.budget)}
-                  expense={String(date.total_expenses)}
-                  seeExpense={() => {seeExpenseDetails(date.id)}}
+                  key={date?.id}
+                  fromDate={String(date?.from_date)}
+                  toDate={String(date?.to_date)}
+                  budget={String(date?.budget)}
+                  expense={String(date?.total_expenses)}
+                  seeExpense={() => {seeExpenseDetails(date?.id)}}
               />
             )})
           }
@@ -94,8 +96,6 @@ const UserDashboard = () => {
       </SafeAreaView>
     );
   }
-  
-
 }
 
 export default UserDashboard;

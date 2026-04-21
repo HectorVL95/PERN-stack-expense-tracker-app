@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Input from 'app/components/Input';
 import Title from 'app/components/Title';
@@ -41,7 +41,7 @@ const Login = () => {
 
   const loginMutation = useMutation({
     mutationFn: loginFn,
-    onSuccess: async(data) => {
+    onSuccess: async (data) => {
       setAuthorized(true)
       await SecureStore.setItemAsync('token', data.token)
       setLoginForm({
@@ -52,6 +52,7 @@ const Login = () => {
     },
     onError: (error) => {
       console.log(error.message)
+      Alert.alert('Unable to login')
     }
   })
 
