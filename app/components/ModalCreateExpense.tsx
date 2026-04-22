@@ -20,8 +20,7 @@ const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({
   setImageSelected
   }) => {
     const [showcasedImage, setShowcasedImage] = useState<null | string>(null)
-  
- 
+
     const createExpense = async () => {
       const token = SecureStorage.getItem('token')
       if (!token) return;
@@ -55,6 +54,7 @@ const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({
       hideModal()
     },
     onError: (error) => {
+      Alert.alert('Expense not created')
       console.error(error.message)
     }
   })

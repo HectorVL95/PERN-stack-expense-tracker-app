@@ -20,3 +20,17 @@ export type ModalCreateExpenseTypeProps = {
   imageSelected: null | string,
   setImageSelected: Dispatch<SetStateAction<string | null>>
 }
+
+export type ModalCreateDateTypeProps = {
+  visibleModal: boolean,
+  hideModal: () => void,
+  refetch: () => void,
+  createDateRangeForm: {
+    fromDate: string,
+    toDate: string
+  },
+  setCreateDateRangeForm: Dispatch<SetStateAction<{
+    fromDate: string,
+    toDate: string
+  }>>,
+}
