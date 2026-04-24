@@ -13,7 +13,7 @@ type ExpensesDashboardTypeProps = {
   route: string
 }
 
-const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Props) => {
+const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }) => {
   const [showModal, setShowModal] = useState(false)
   const [selectedExpenseId, setSelectedExpenseId] = useState('')
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -74,7 +74,6 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
     onSuccess: () => {
       setShowModal(false)
       refetch()
-
     },
     onError: (error) => {
       console.error(error.message)
@@ -88,6 +87,7 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
   const handleAddExpenseBtn = () => {
     setShowCreateModal(true)
   }
+
 
   const handleHideCreateExpenseModal = () => {
     setShowCreateModal(false)
@@ -112,67 +112,68 @@ const ExpensesDashboard: React.FC<ExpensesDashboardTypeProps> = ({ route }: Prop
           ... LOADING
         </Text>
       }
-      <Pressable onPress={handleAddExpenseBtn} className='bg-secondary max-w-[100px] p-4 rounded-lg'>
-        <Text className="text-white text-center">
-          Add Expense
-        </Text>
-      </Pressable>
+        <Pressable onPress={handleAddExpenseBtn} className='bg-secondary max-w-[100px] p-4 rounded-lg'>
+          <Text className="text-white text-center">
+            Add Expense
+          </Text>
+        </Pressable>
+       <ModalCreateExpense 
+            visibleModal={showCreateModal}
+            hideModal={handleHideCreateExpenseModal}
+            refetch={refetch}
+            dateRangeId={dateRangeId}
+            createExpenseForm={createExpenseForm}
+            setCreateExpenseForm={setCreateExpenseForm}
+            imageSelected={imageSelected}
+            setImageSelected={setImageSelected}
+          />
       { 
         isSuccess &&
         <>
-        <View>
-          <ScrollView contentContainerClassName='gap-4'>
-            { 
-              fetchedExpenses.map((expense: any) => {
-                return (
-                <Expense
-                  key={expense.id}
-                  name={expense.name}
-                  amount={expense.amount}
-                  location={expense.location}
-                  image={expense.image}
-                  dateCreated={expense.date_created}
-                  timeCreated={expense.hour_created}
-                  onPress={() => {handlePress(expense.id)}}
-                />
-                )
-              })
-            }
-          </ScrollView>
-        </View>
-        <ModalLayout
-          visible={showModal}
-          onRequestClose={() => setShowModal(false)}
-          onDismiss={() => setShowModal(false)}
-          animationType = 'slide'
-          backdropColor='#07277cff'
-        >
-         <View className="flex justify-center items-center py-8">
-            {
-              Platform.OS === 'ios' ? 
-              <Button onPress={handleDeleteBtn} title="Delete">Delete</Button>
-              :
-              <Pressable onPress={handleDeleteBtn} className="bg-tertiary text-white max-w-[80px] rounded-md p-2 flex-row items-center gap-4 justify-center items-center">
-                <Text className='text-[#ff0000]'>
-                  Delete
-                </Text>
-                <View>
-                  <Ionicons name='delete' size={24}  color={'#ff0000'} />
-                </View>
-              </Pressable>
-            }
+          <View>
+            <ScrollView contentContainerClassName='gap-4'>
+              { 
+                fetchedExpenses.map((expense: any) => {
+                  return (
+                  <Expense
+                    key={expense.id}
+                    name={expense.name}
+                    amount={expense.amount}
+                    location={expense.location}
+                    image={expense.image}
+                    dateCreated={expense.date_created}
+                    timeCreated={expense.hour_created}
+                    onPress={() => {handlePress(expense.id)}}
+                  />
+                  )
+                })
+              }
+            </ScrollView>
           </View>
-        </ModalLayout>
-        <ModalCreateExpense 
-          visibleModal={showCreateModal}
-          hideModal={handleHideCreateExpenseModal}
-          refetch={refetch}
-          dateRangeId={dateRangeId}
-          createExpenseForm={createExpenseForm}
-          setCreateExpenseForm={setCreateExpenseForm}
-          imageSelected={imageSelected}
-          setImageSelected={setImageSelected}
-         />
+          <ModalLayout
+            visible={showModal}
+            onRequestClose={() => setShowModal(false)}
+            onDismiss={() => setShowModal(false)}
+            animationType = 'slide'
+            backdropColor='#07277cff'
+          >
+            <View className="flex justify-center items-center py-8">
+              {
+                Platform.OS === 'ios' ? 
+                <Button onPress={handleDeleteBtn} title="Delete">Delete</Button>
+                :
+                <Pressable onPress={handleDeleteBtn} className="bg-tertiary text-white max-w-[80px] rounded-md p-2 flex-row items-center gap-4 justify-center items-center">
+                  <Text className='text-[#ff0000]'>
+                    Delete
+                  </Text>
+                  <View>
+                    <Ionicons name='delete' size={24}  color={'#ff0000'} />
+                  </View>
+                </Pressable>
+              }
+            </View>
+          </ModalLayout>
+         
         </>
       }
     </SafeAreaView>

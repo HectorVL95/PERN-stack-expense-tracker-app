@@ -12,10 +12,10 @@ const UserDashboard = () => {
   const navigation = useNavigation();
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [createDateRangeForm, setCreateDateRangeForm] = useState({
-    fromDate: '',
-    toDate: ''
+    fromDate: new Date(),
+    toDate: new Date()
   })
-
+  const [budget, setBudget] = useState('')
 
   const fetchDateRanges = async () => {
     const token = SecureStorage.getItem('token')
@@ -51,7 +51,7 @@ const UserDashboard = () => {
     queryFn: fetchDateRanges,
   })
 
-  const { data: fetchedUser, isSuccess: successUser, isLoading: loadingUser } = useQuery({
+  const { data: fetchedUser, isSuccess: successUser, isLoading: loadingUser, isError } = useQuery({
     queryKey: ['user'],
     queryFn: fetchUser
   })
@@ -67,9 +67,10 @@ const UserDashboard = () => {
   const handleHideCreateDateRangeModal = () => {
     setShowCreateModal(false)
     setCreateDateRangeForm({
-      fromDate: '',
-      toDate: ''
+      fromDate: new Date(),
+      toDate: new Date()
     })
+    setBudget('')
   }
 
   if (loadingUser) {
@@ -99,7 +100,7 @@ const UserDashboard = () => {
               Add Date Range
             </Text>
           </Pressable>
-        </View>
+        </View>      
         <ScrollView contentContainerClassName="flex flex-col gap-4">
           <Text className="text-white">Your date ranges</Text>
           {
@@ -122,6 +123,8 @@ const UserDashboard = () => {
           refetch={refetch}
           createDateRangeForm={createDateRangeForm}
           setCreateDateRangeForm={setCreateDateRangeForm}
+          budget={budget}
+          setBudget={setBudget}
         />
       </SafeAreaView>
     );

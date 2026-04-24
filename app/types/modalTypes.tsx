@@ -23,14 +23,16 @@ export type ModalCreateExpenseTypeProps = {
 
 export type ModalCreateDateTypeProps = {
   visibleModal: boolean,
-  hideModal: () => void,
   refetch: () => void,
+  hideModal: () => void,
   createDateRangeForm: {
-    fromDate: string,
-    toDate: string
+    fromDate: Date,
+    toDate: Date
   },
   setCreateDateRangeForm: Dispatch<SetStateAction<{
-    fromDate: string,
-    toDate: string
+    fromDate: Date,
+    toDate: Date
   }>>,
+  budget: string,
+  setBudget: Dispatch<SetStateAction<string>>
 }
