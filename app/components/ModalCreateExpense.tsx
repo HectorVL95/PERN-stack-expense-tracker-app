@@ -1,7 +1,7 @@
 import Input from './Input';
-import { Modal, View, Text, Pressable, Alert, Image, ActionSheetIOS, Platform } from 'react-native'
+import { View, Text, Pressable, Alert, Image, ActionSheetIOS, Platform } from 'react-native'
 import ModalLayout from 'app/Layouts/ModalLayout';
-import { SetStateAction, Dispatch, useState } from 'react';
+import { useState } from 'react';
 import Ionicons from '@expo/vector-icons/AntDesign'
 import { useMutation } from '@tanstack/react-query';
 import Title from './Title';
@@ -139,7 +139,7 @@ const ModalCreateExpense: React.FC<ModalCreateExpenseTypeProps> = ({
       })
     } else {
       Alert.alert(
-        'Select Imnage',
+        'Select Image',
         'Choose an option',
         [
           { text: 'Cancel', style: 'cancel' },

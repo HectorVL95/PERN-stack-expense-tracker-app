@@ -5,12 +5,13 @@ type DateRangeTypesProps = {
   toDate: string,
   budget: number,
   expense: number
-  seeExpense: () => void 
+  seeExpense: () => void,
+  onLongPress: () => void
 }
 
-const DateRange: React.FC<DateRangeTypesProps> = ({fromDate, toDate, budget, expense, seeExpense}) => {
+const DateRange: React.FC<DateRangeTypesProps> = ({ fromDate, toDate, budget, expense, seeExpense, onLongPress }) => {
   return (
-    <Pressable onPress={seeExpense} className="flex-row  justify-between border border-white rounded-lg p-4">
+    <Pressable onLongPress={onLongPress} onPress={seeExpense} className="flex-row  justify-between border border-white rounded-lg p-4">
       <View>
         <Text className='text-white'>
           From: {fromDate}

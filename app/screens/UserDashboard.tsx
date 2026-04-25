@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, Pressable } from 'react-native';
+import { Text, View, ScrollView, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateRange from 'app/components/DateRange';
 import Title from 'app/components/Title';
@@ -7,15 +7,18 @@ import * as SecureStorage from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import ModalCreateDateRange from 'app/components/ModalCreateDateRange';
+import ModalEditDateRange from 'app/components/ModalEditDateRange';
 
 const UserDashboard = () => {
   const navigation = useNavigation();
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [createDateRangeForm, setCreateDateRangeForm] = useState({
     fromDate: new Date(),
     toDate: new Date()
   })
   const [budget, setBudget] = useState('')
+  const [dateRangeId, setDateRangeId] = useState('')
 
   const fetchDateRanges = async () => {
     const token = SecureStorage.getItem('token')
@@ -30,6 +33,8 @@ const UserDashboard = () => {
     const data = await res.json()
     return data.data
   }
+
+  console.log(createDateRangeForm)
 
   const fetchUser = async () => {
     const token = SecureStorage.getItem('token')
@@ -73,6 +78,34 @@ const UserDashboard = () => {
     setBudget('')
   }
 
+  const handleShowEditDateRangeModal = () => {
+    setShowEditModal(true)
+  }
+
+
+  const handleOnLongPress = (rangeId) => {
+    setDateRangeId(rangeId)
+    Alert.alert(
+      'Options',
+      'Choose an option',
+      [
+        {
+          text:'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Edit',
+          onPress: handleShowEditDateRangeModal
+        },
+        {
+          text: 'Delete',
+          onPress: () => {}
+        },
+      ],
+      {cancelable: true}
+    )
+  }
+
   if (loadingUser) {
     return (
       <SafeAreaView className="bg-primary flex-1 pt-4 px-8 gap-8">
@@ -106,7 +139,8 @@ const UserDashboard = () => {
           {
             fetchedDates?.map((date: any) => {
               return(
-                <DateRange 
+                <DateRange
+                  onLongPress={() => {handleOnLongPress(date?.id ?? '')}}
                   key={date?.id}
                   fromDate={String(date?.from_date)}
                   toDate={String(date?.to_date)}
@@ -125,6 +159,10 @@ const UserDashboard = () => {
           setCreateDateRangeForm={setCreateDateRangeForm}
           budget={budget}
           setBudget={setBudget}
+        />
+        <ModalEditDateRange
+          visibleModal={showEditModal}
+
         />
       </SafeAreaView>
     );

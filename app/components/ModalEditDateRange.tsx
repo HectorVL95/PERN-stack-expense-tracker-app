@@ -7,7 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { useState } from 'react';
 import Input from './Input';
 
-const ModalCreateDateRange: React.FC<ModalCreateDateTypeProps> = ({
+const ModalEditDateRange: React.FC<ModalCreateDateTypeProps> = ({
   visibleModal, 
   hideModal, 
   refetch, 
@@ -22,19 +22,24 @@ const ModalCreateDateRange: React.FC<ModalCreateDateTypeProps> = ({
     toDate: false
   })
 
-  const createDateRange = async () => {
+  const [editRangeForm, setEditRangeForm] = useState({
+    fromDate:'',
+    toDate: ''
+  })
+
+  const editDateRange = async () => {
     const token = SecureStorage.getItem('token')
     if (!token) return;
 
     const res = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_SERVER}${process.env.EXPO_PUBLIC_DATE_RANGE_ENDPOINT}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
-        from_date: createDateRangeForm.fromDate.toISOString().split('T')[0],
-        to_date: createDateRangeForm.toDate.toISOString().split('T')[0],
+        from_date: editRangeForm.fromDate.split('T')[0],
+        to_date: editRangeForm.toDate.split('T')[0],
         budget: Number(budget)
       })
     })
@@ -43,8 +48,8 @@ const ModalCreateDateRange: React.FC<ModalCreateDateTypeProps> = ({
     return data.data
   }
 
-  const createDateRangeMutation = useMutation({
-    mutationFn: createDateRange,
+  const editDateRangeMutation = useMutation({
+    mutationFn: editDateRange,
     onSuccess: () => {
       refetch()
       hideModal()
@@ -56,7 +61,7 @@ const ModalCreateDateRange: React.FC<ModalCreateDateTypeProps> = ({
   })
 
   const handleAddBtn = () => {
-    createDateRangeMutation.mutate()
+    editDateRangeMutation.mutate()
   }
 
   return (
@@ -217,4 +222,4 @@ const ModalCreateDateRange: React.FC<ModalCreateDateTypeProps> = ({
   );
 }
 
-export default ModalCreateDateRange;
+export default ModalEditDateRange;
