@@ -38,6 +38,7 @@ const ModalEditDateRange: React.FC<ModalCreateDateTypeProps> = ({
         'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
+        id: 
         from_date: editRangeForm.fromDate.split('T')[0],
         to_date: editRangeForm.toDate.split('T')[0],
         budget: Number(budget)
